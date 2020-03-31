@@ -24,16 +24,24 @@ public class StackWithMax {
         FastScanner scanner = new FastScanner();
         int queries = scanner.nextInt();
         Stack<Integer> stack = new Stack<Integer>();
+        Stack<Integer> max = new Stack<Integer>();
 
         for (int qi = 0; qi < queries; ++qi) {
             String operation = scanner.next();
             if ("push".equals(operation)) {
                 int value = scanner.nextInt();
                 stack.push(value);
+
+                if(max.isEmpty() || value>=max.peek())
+                    max.push(value);
             } else if ("pop".equals(operation)) {
-                stack.pop();
+                int value = stack.pop();
+                if(!max.isEmpty() && value==max.peek())
+                    max.pop();
             } else if ("max".equals(operation)) {
-                System.out.println(Collections.max(stack));
+                if(!max.isEmpty())
+                    System.out.println(max.peek());
+                // System.out.println(Collections.max(stack));
             }
         }
     }
