@@ -32,22 +32,31 @@ public class BuildHeap {
 
     private void generateSwaps() {
       swaps = new ArrayList<Swap>();
-      // The following naive implementation just sorts 
-      // the given sequence using selection sort algorithm
-      // and saves the resulting sequence of swaps.
-      // This turns the given array into a heap, 
-      // but in the worst case gives a quadratic number of swaps.
-      //
-      // TODO: replace by a more efficient implementation
-      for (int i = 0; i < data.length; ++i) {
-        for (int j = i + 1; j < data.length; ++j) {
-          if (data[i] > data[j]) {
-            swaps.add(new Swap(i, j));
-            int tmp = data[i];
-            data[i] = data[j];
-            data[j] = tmp;
-          }
+      for (int i = data.length / 2 - 1; i >= 0; i--) 
+        heapify(i);
+    }
+
+    private void heapify(int i){
+      while(i<data.length){
+        int l = 2*i + 1;
+        int r = 2*i + 2;
+
+        int smallest = i;
+        if(l<data.length && data[l]<data[smallest])
+          smallest = l;
+        
+        if(r<data.length && data[r]<data[smallest])
+          smallest = r;
+        
+        if(smallest!=i){
+          int temp = data[i];
+          data[i] = data[smallest];
+          data[smallest] = temp;
+          swaps.add(new Swap(i,smallest));
+          i = smallest;
         }
+        else
+          break;
       }
     }
 
