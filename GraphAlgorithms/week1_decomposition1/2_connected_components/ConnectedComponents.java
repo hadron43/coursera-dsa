@@ -2,9 +2,26 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ConnectedComponents {
+    static boolean visited[];
+
+    private static void explore(ArrayList<Integer>[] adj, int i){
+        if(visited[i]==false){
+            visited[i] = true;
+            for(int j: adj[i])
+                explore(adj, j);
+        }
+    }
+
     private static int numberOfComponents(ArrayList<Integer>[] adj) {
         int result = 0;
-        //write your code here
+        visited = new boolean[adj.length];
+
+        for(int i=0; i< adj.length; ++i){
+            if(visited[i]==false){
+                explore(adj, i);
+                result++;
+            }
+        }
         return result;
     }
 
