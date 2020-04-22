@@ -2,9 +2,21 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Reachability {
+    static ArrayList<Integer> visited;
+
     private static int reach(ArrayList<Integer>[] adj, int x, int y) {
-        //write your code here
-        return 0;
+        if(x==y)
+            return 1;
+        else{
+            int res = 0;
+            for(int i: adj[x]){
+                if(!visited.contains(i)){
+                    visited.add(i);
+                    res = res | reach(adj, i, y);
+                }
+            }
+            return res;
+        }
     }
 
 
@@ -13,6 +25,7 @@ public class Reachability {
         int n = scanner.nextInt();
         int m = scanner.nextInt();
         ArrayList<Integer>[] adj = (ArrayList<Integer>[])new ArrayList[n];
+        visited = new ArrayList<>();
         for (int i = 0; i < n; i++) {
             adj[i] = new ArrayList<Integer>();
         }
