@@ -6,12 +6,27 @@ public class Toposort {
     private static ArrayList<Integer> toposort(ArrayList<Integer>[] adj) {
         int used[] = new int[adj.length];
         ArrayList<Integer> order = new ArrayList<Integer>();
-        //write your code here
+        
+        for(int i=0; i<adj.length; ++i){
+            if(used[i]==0)
+                dfs(adj, used, order, i);
+        }
+
+        Collections.reverse(order);
+
         return order;
     }
 
     private static void dfs(ArrayList<Integer>[] adj, int[] used, ArrayList<Integer> order, int s) {
-      //write your code here
+      used[s] = 1;
+
+      for(int x: adj[s]){
+          if(used[x]==0)
+            dfs(adj, used, order, x);
+      }
+
+      order.add(s);
+
     }
 
     public static void main(String[] args) {
