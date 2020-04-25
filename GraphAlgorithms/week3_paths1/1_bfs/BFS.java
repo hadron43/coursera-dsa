@@ -5,8 +5,27 @@ import java.util.Scanner;
 
 public class BFS {
     private static int distance(ArrayList<Integer>[] adj, int s, int t) {
-        //write your code here
-        return -1;
+        int n = adj.length;        
+        int dist[] = new int[n];
+        
+        for(int i=0; i<n; ++i)
+            dist[i] = -1;
+        
+        dist[s] = 0;
+        Queue<Integer> q = new LinkedList<Integer>();
+        q.add(s);
+
+        while(!q.isEmpty()){
+            int x = q.poll();
+            for(int i: adj[x]){
+                if(dist[i]==-1){
+                    dist[i] = dist[x] + 1;
+                    q.add(i);
+                }
+            }
+        }
+
+        return dist[t];
     }
 
     public static void main(String[] args) {
