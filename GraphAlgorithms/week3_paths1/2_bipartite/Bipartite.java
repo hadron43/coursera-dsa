@@ -5,8 +5,29 @@ import java.util.Scanner;
 
 public class Bipartite {
     private static int bipartite(ArrayList<Integer>[] adj) {
-        //write your code here
-        return -1;
+        int n = adj.length;        
+        int color[] = new int[n];
+        
+        for(int i=0; i<n; ++i)
+            color[i] = -1;
+        
+        color[0] = 0;
+        Queue<Integer> q = new LinkedList<Integer>();
+        q.add(0);
+
+        while(!q.isEmpty()){
+            int x = q.poll();
+            for(int i: adj[x]){
+                if(color[i]==-1){
+                    color[i] = color[x] ^ 1;
+                    q.add(i);
+                }
+                if(color[i]==color[x])
+                    return 0;
+            }
+        }
+
+        return 1;
     }
 
     public static void main(String[] args) {
