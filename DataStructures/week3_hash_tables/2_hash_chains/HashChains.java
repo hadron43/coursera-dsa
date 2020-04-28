@@ -9,7 +9,7 @@ public class HashChains {
     private FastScanner in;
     private PrintWriter out;
     // store all strings in one list
-    private List<String> elems;
+    private List<String> elems[];
     // for hash function
     private int bucketCount;
     private int prime = 1000000007;
@@ -44,20 +44,25 @@ public class HashChains {
     }
 
     private void processQuery(Query query) {
+        int hash;
         switch (query.type) {
             case "add":
-                if (!elems.contains(query.s))
-                    elems.add(0, query.s);
+                hash = hashFunc(query.s);
+                if (!elems[hash].contains(query.s))
+                    elems[hash].add(0, query.s);
                 break;
             case "del":
-                if (elems.contains(query.s))
-                    elems.remove(query.s);
+                hash = hashFunc(query.s);
+                if (elems[hash].contains(query.s))
+                    elems[hash].remove(query.s);
                 break;
             case "find":
-                writeSearchResult(elems.contains(query.s));
+                hash = hashFunc(query.s);
+                writeSearchResult(elems[hash].contains(query.s));
                 break;
             case "check":
-                for (String cur : elems)
+                hash = query.ind;
+                for (String cur : elems[hash])
                     if (hashFunc(cur) == query.ind)
                         out.print(cur + " ");
                 out.println();
@@ -70,10 +75,15 @@ public class HashChains {
     }
 
     public void processQueries() throws IOException {
-        elems = new ArrayList<>();
+        
         in = new FastScanner();
         out = new PrintWriter(new BufferedOutputStream(System.out));
         bucketCount = in.nextInt();
+
+        elems = (ArrayList<String>[])new ArrayList[bucketCount];
+        for(int i=0; i<bucketCount; ++i)
+            elems[i] = new ArrayList<String>();
+
         int queryCount = in.nextInt();
         for (int i = 0; i < queryCount; ++i) {
             processQuery(readQuery());
