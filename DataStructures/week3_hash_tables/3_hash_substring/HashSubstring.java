@@ -8,7 +8,7 @@ public class HashSubstring {
 
     private static FastScanner in;
     private static PrintWriter out;
-
+    private static long p = 1000000000000000000L;
     public static void main(String[] args) throws IOException {
         in = new FastScanner();
         out = new PrintWriter(new BufferedOutputStream(System.out));
@@ -29,21 +29,45 @@ public class HashSubstring {
         }
     }
 
+    private static long codeGen(String s){
+        int n = s.length();
+        long code = 0;
+
+        for(int i=n-1; i>=0; --i){
+            code = ((code*1)%p + p)%p;
+            code = ((code + conv(s.charAt(i)))%p + p)%p;
+        }
+
+        return code;
+    }
+
+    private static long conv(char c){
+        if('A'<=c && 'Z'>=c)
+            return (long)(c-'A') + 1;
+        return (long)(c-'a') + 27;
+    }
+
     private static List<Integer> getOccurrences(Data input) {
         String s = input.pattern, t = input.text;
         int m = s.length(), n = t.length();
         List<Integer> occurrences = new ArrayList<Integer>();
-        for (int i = 0; i + m <= n; ++i) {
-	    boolean equal = true;
-	    for (int j = 0; j < m; ++j) {
-		if (s.charAt(j) != t.charAt(i + j)) {
-		     equal = false;
- 		    break;
-		}
-	    }
-            if (equal)
+
+        //Code for precomputing all relevant hash codes
+        long hash[] = new long[n-m+1];
+        hash[0] = codeGen(t.substring(0, m));
+
+        long c = (long)Math.pow(1, m-1);
+
+        for(int i=0; i<hash.length-1; ++i){
+            hash[i+1] = ((((hash[i] - (conv(t.charAt(i)) * c)*1)%p) + conv(t.charAt(i+m)))%p + p)%p;
+        }
+
+        long tHash = codeGen(s);
+        for(int i=0; i<hash.length; ++i){
+            if(tHash == hash[i] && s.equals(t.substring(i, i+m)))
                 occurrences.add(i);
-	}
+        }
+        
         return occurrences;
     }
 
