@@ -45,9 +45,26 @@ public class is_bst_hard {
             }
         }
 
-        boolean isBinarySearchTree() {
-          // Implement correct algorithm here
-          return true;
+        boolean isBinarySearchTree(Node root, long l, long up){
+            if(root.key>=l && root.key<up){    
+                if(root.left!=-1 && root.right!=-1)
+                    return isBinarySearchTree(tree[root.left], l, root.key) && isBinarySearchTree(tree[root.right], root.key, up);
+                else if(root.left==-1 && root.right==-1)
+                    return true;
+                else if(root.left==-1)
+                    return isBinarySearchTree(tree[root.right], root.key, up);
+                else if(root.right==-1)
+                    return isBinarySearchTree(tree[root.left], l, root.key);
+            }
+
+            return false;
+        }
+
+        boolean solve() {
+        
+            if(nodes==0)
+                return true;
+            return isBinarySearchTree(tree[0], -Long.MIN_VALUE, Long.MAX_VALUE);
         }
     }
 
