@@ -45,9 +45,26 @@ public class is_bst {
             }
         }
 
+        boolean isBinarySearchTree(Node root, int l, int up){
+            if(root.key>l && root.key<up){    
+                if(root.left!=-1 && root.right!=-1)
+                    return isBinarySearchTree(tree[root.left], l, root.key) && isBinarySearchTree(tree[root.right], root.key, up);
+                else if(root.left==-1 && root.right==-1)
+                    return true;
+                else if(root.left==-1)
+                    return isBinarySearchTree(tree[root.right], root.key, up);
+                else if(root.right==-1)
+                    return isBinarySearchTree(tree[root.left], l, root.key);
+            }
+
+            return false;
+        }
+
         boolean isBinarySearchTree() {
-          // Implement correct algorithm here
-          return true;
+        
+            if(nodes==0)
+                return true;
+            return isBinarySearchTree(tree[0], -Integer.MIN_VALUE, Integer.MAX_VALUE);
         }
     }
 
@@ -64,7 +81,7 @@ public class is_bst {
     public void run() throws IOException {
         IsBST tree = new IsBST();
         tree.read();
-        if (tree.solve()) {
+        if (tree.isBinarySearchTree()) {
             System.out.println("CORRECT");
         } else {
             System.out.println("INCORRECT");
